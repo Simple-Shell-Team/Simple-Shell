@@ -144,17 +144,34 @@ int run_builtin(const Command *command, int *should_exit)
             }
         }
 
+
     } else if (strcmp(name, "jobs") == 0) {
         JobList *jobs = shell_job_list();
         Job *job;
 
         for (job = jobs->head; job != NULL; job = job->next) {
-            printf("[%d] Running %s\n",
+            size_t i;
+            int printed_pid = 0;
+
+            printf("[%d] Running %s (PIDs:",
                    job->job_id,
                    job->command_line == NULL
                        ? "(unknown command)"
                        : job->command_line);
+
+            for (i = 0; i < job->pid_count; i++) {
+                if (job->pids[i] <= 0)
+                    continue;
+
+                printf("%s%ld",
+                       printed_pid ? ", " : " ",
+                       (long)job->pids[i]);
+                printed_pid = 1;
+            }
+
+            puts(")");
         }
+
 
     } else if (strcmp(name, "exit") == 0) {
         char *end;
