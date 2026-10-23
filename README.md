@@ -41,7 +41,7 @@ The system is a standalone, self-contained command-line application. It does not
 - **Built-in Commands** — Supports commands that must run in the shell's own process rather than a child process, such as `cd`, `exit`, `pwd`, `echo`, and `help`.
 - **I/O Redirection** — Supports redirecting input and output using `<`, `>`, and `>>`.
 - **Piping** — Supports chaining multiple commands together using `|`, passing the output of one command as input to the next.
-- **Background Execution** — Supports running commands in the background using `&`, along with basic job tracking.
+- **Background Execution and Job Listing** — Supports running commands in the background using `&`. The `jobs` built-in lists active background jobs with their job IDs, process IDs (PIDs), command lines, and running status.
 - **Environment Variable & PATH Resolution** — Resolves executables using the system `PATH` and supports basic environment variable handling.
 - **Error Handling** — Gracefully handles invalid commands, missing files, permission errors, and malformed input without crashing the shell.
 - **(Stretch Goal) Command History** — Recalls and re-executes previously entered commands.

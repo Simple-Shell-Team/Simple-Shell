@@ -200,6 +200,22 @@ run_case "TC-24" "REQ-19" "jobs lists background job" \
 jobs
 exit
 ' 0 "Running sleep 1"
+
+# Verify that jobs displays a numeric PID for an active background job.
+printf 'sleep 5 &\njobs\nexit\n' | "$SHELL_BIN" \
+    >"$TMP_DIR/stdout" 2>"$TMP_DIR/stderr"
+
+if grep -Eq '\[[0-9]+\] Running sleep 5 \(PIDs: [0-9]+\)' "$TMP_DIR/stdout"; then
+    printf 'PASS: TC-33 (jobs displays background PID, REQ-19)\n'
+    PASS_COUNT=$((PASS_COUNT + 1))
+    record_result "TC-33" "REQ-19" PASS
+else
+    printf 'FAIL: TC-33 (jobs does not display a numeric PID, REQ-19)\n'
+    cat "$TMP_DIR/stdout" "$TMP_DIR/stderr" >&2
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    record_result "TC-33" "REQ-19" FAIL
+fi
+
 run_case "TC-25" "REQ-SEC-2" "reject parent traversal path" \
     'echo rejected > ../rejected
 exit
