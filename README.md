@@ -135,7 +135,21 @@ make test
 The suite in `tests/test_cases.sh` runs the shell non-interactively and covers
 PATH lookup, built-ins, redirection, pipelines, background jobs, parser errors,
 and malformed or unusually long input.
+## REPL and Built-in Verification
 
+The REPL and built-in commands can be verified interactively after building the project.
+
+Run `./myshell` to start the shell, then check the following:
+
+- The `myshell>` prompt appears and remains available after empty input.
+- `pwd` displays the current working directory.
+- `echo Hello World` prints the supplied text.
+- `cd` changes directories; an invalid directory produces an error without changing the working directory.
+- `help` displays the supported built-in commands and operators.
+- `export` and `unset` update environment variables used by subsequent commands.
+- `exit 7` terminates the shell with exit status 7.
+
+Run `make test` to execute the automated regression suite. Record manual checks and automated test results when verifying changes to the REPL and built-in commands.
 ## Known Limitations
 
 - `2>` and `&&` are not supported.
