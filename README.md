@@ -124,6 +124,18 @@ This will compile the project and produce an executable named `myshell` (or as d
   and output parent directories are canonicalized with `realpath()` before
   `open()` is called.
 
+## Requirements Traceability
+
+The requirements traceability matrix maps the requirements in the SRS to
+implementation references, available automated tests, and implementation
+status.
+
+See [`docs/rtm_code_references.md`](docs/rtm_code_references.md).
+
+Run the regression suite with `make clean && make test`. A passing test
+confirms only the behavior asserted by that test; see the matrix for known
+coverage gaps and unimplemented requirements.
+
 ## Testing
 
 Build and run the regression suite with:
