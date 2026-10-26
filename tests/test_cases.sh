@@ -267,7 +267,10 @@ run_case "TC-32" "REQ-10" "maximum supported line" \
     "echo $LONG_ARGUMENT
 exit
 " 0 "$LONG_ARGUMENT"
-
+run_case "TC-34" "REQ-6" "quoted argument with spaces" \
+    'printf "<%s>" "quoted argument with spaces"
+exit
+' 0 "<quoted argument with spaces>"
 printf '\nRequirement coverage:\n'
 printf '%-12s %-20s %s\n' "REQ-ID" "TEST IDS" "PASS/FAIL"
 for requirement in REQ-1 REQ-2 REQ-3 REQ-4 REQ-5 REQ-6 REQ-7 REQ-8 \
