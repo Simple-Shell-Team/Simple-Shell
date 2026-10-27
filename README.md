@@ -67,7 +67,7 @@ The system is a standalone, self-contained command-line application. It does not
 | --- | --- | --- |
 | **Prithviraj** | REQ-1–REQ-4: REPL loop (prompt/read/execute cycle) and built-ins: `cd`, `exit`, `pwd`, `echo`, `help` | Near-instant response for built-ins; clear error message on invalid usage |
 | **Aarush** | REQ-5–REQ-8: parsing/tokenization; REQ-18–REQ-19: background execution and job IDs | Robust malformed-input handling; prompt returns without waiting for background work |
-| **Debhargo** | REQ-9–REQ-12: command execution; REQ-16–REQ-17: piping and descriptor cleanup | Correct fork/exec/wait behavior, PATH-independent execution, and no pipeline hangs |
+| **Debargho** | REQ-9–REQ-12: command execution; REQ-16–REQ-17: piping and descriptor cleanup | Correct fork/exec/wait behavior, PATH-independent execution, and no pipeline hangs |
 | **Diya** | REQ-13–REQ-15: redirection; REQ-20: environment/PATH handling; REQ-SEC-2 security validation | Correct combined redirection and environment behavior with validated file paths |
 
 > Everyone is expected to test and review across all modules, not just their own — per team guidelines.
@@ -132,9 +132,31 @@ Build and run the regression suite with:
 make test
 ```
 
-The suite in `tests/test_cases.sh` runs the shell non-interactively and covers
-PATH lookup, built-ins, redirection, pipelines, background jobs, parser errors,
-and malformed or unusually long input.
+`make test` runs both the focused C unit tests and the shell regression suite:
+
+- `tests/test_parser.c`: 12 parser checks covering commands, quoting, pipelines,
+  redirection, background markers, environment expansion, empty input, and
+  syntax errors.
+- `tests/test_executor.c`: 7 executor checks covering exit statuses, missing
+  commands, and pipeline status handling.
+- `tests/test_cases.sh`: 34 requirement-labelled integration checks covering
+  PATH lookup, built-ins, redirection, pipelines, background jobs, parser
+  errors, and malformed or unusually long input.
+
+The requirement coverage printed by `tests/test_cases.sh` includes the
+following issue-specific entries:
+
+| Requirement | Regression coverage |
+| --- | --- |
+| REQ-6: quoted text is one argument | TC-29 and TC-34 |
+| REQ-14: `>` truncates stdout | TC-12 and TC-19 |
+| REQ-19: background job listing | TC-24 and TC-33 |
+
+The complete source/function mapping is maintained in
+[`docs/rtm_code_references.md`](docs/rtm_code_references.md). The submitted
+SRS, SAD, and Test Plan are stored in [`docs/`](docs/), and the reproducible
+test output and manual-evidence checklist are recorded in
+[`docs/test_evidence.md`](docs/test_evidence.md).
 ## REPL and Built-in Verification
 
 The REPL and built-in commands can be verified interactively after building the project.
