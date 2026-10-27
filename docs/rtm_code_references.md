@@ -11,9 +11,9 @@ being represented as complete.
 | REQ-3 | Support core built-ins | `src/builtins.c`: `run_builtin`; `src/executor.c`: `execute_commands` | Implemented |
 | REQ-4 | Report invalid `cd` without changing directory | `src/builtins.c`: `run_builtin` | Implemented |
 | REQ-5 | Handle consecutive whitespace | `src/parser.c`: `parse_line`, `parse_word` | Implemented |
-| REQ-6 | Treat quoted text as one argument | `src/parser.c`: `parse_word` | Implemented |
-| REQ-7 | Recognize shell operators | `src/parser.c`: `parse_line` | Implemented |
-| REQ-8 | Accept empty and whitespace-only lines | `src/main.c`: `main`; `src/parser.c`: `parse_line` | Implemented |
+| REQ-6 | Treat quoted text as one argument | `src/parser.c`: `parse_word`; `tests/test_cases.sh`: TC-29, TC-34 | Implemented |
+| REQ-7 | Recognize shell operators | `src/parser.c`: `parse_line`; `tests/test_cases.sh`: TC-12, TC-29, TC-31 | Implemented |
+| REQ-8 | Accept empty and whitespace-only lines | `src/main.c`: `main`; `src/parser.c`: `parse_line`; `tests/test_cases.sh`: TC-13 | Implemented |
 | REQ-9 | Execute external commands with fork/exec | `src/executor.c`: `execute_command`, `exec_command` | Implemented |
 | REQ-10 | Resolve bare names through PATH | `src/environment.c`: `resolve_executable_path`; `src/executor.c`: `exec_command` | Implemented |
 | REQ-11 | Wait for foreground children | `src/executor.c`: `execute_command`, `execute_pipeline` | Implemented |
@@ -23,7 +23,7 @@ being represented as complete.
 | REQ-15 | Append stdout with `>>` | `src/redirection.c`: `apply_redirection` | Implemented |
 | REQ-16 | Chain commands with pipes | `src/executor.c`: `execute_pipeline` | Implemented |
 | REQ-17 | Close unused pipe descriptors | `src/executor.c`: `execute_pipeline`, `close_pipes` | Implemented |
-| REQ-18 | Run commands in the background | `src/executor.c`: `run_in_background`, `execute_pipeline` | Implemented |
+| REQ-18 | Run commands in the background | `src/executor.c`: `run_in_background`, `execute_pipeline`; `tests/test_cases.sh`: TC-21, TC-22, TC-23 | Implemented |
 | REQ-19 | View active background jobs with job IDs, PIDs, command lines, and status | `src/executor.c`: `JobList`, `reap_finished_jobs`, `shell_job_list`; `src/builtins.c`: `jobs` built-in; `tests/test_cases.sh`: TC-24, TC-33 | Implemented |
 | REQ-20 | Read and pass environment variables | `src/environment.c`: `shell_getenv`; `src/builtins.c`: `run_builtin`; `src/parser.c`: `expand_variable` | Implemented |
 | REQ-21 | Maintain command history | No implementation | Not implemented |
