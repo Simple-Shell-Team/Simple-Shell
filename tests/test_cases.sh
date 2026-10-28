@@ -58,15 +58,18 @@ run_case()
     fi
 }
 
-run_case "TC-01" "REQ-1,REQ-2" "external command and PATH lookup" \
+run_case "TC-01" "REQ-9,REQ-10" "external command and PATH lookup" \
     'ls
 exit
 ' 0 "Makefile"
-run_case "TC-02" "REQ-1" "missing command returns 127" \
+run_case "TC-02" "REQ-12" "missing command reports an error" \
     'definitely-not-a-command
 exit
 ' 0 "command not found"
-run_case "TC-03" "REQ-1" "command containing a slash" \
+run_case "TC-34" "REQ-12" "missing command sets shell status to 127 at EOF" \
+    'definitely-not-a-command
+' 127 "command not found"
+run_case "TC-03" "REQ-9" "command containing a slash" \
     '/bin/echo slash
 exit
 ' 0 "slash"
@@ -126,14 +129,14 @@ identity_status=$?
 if [ "$identity_status" -eq 0 ] &&
    grep -Fxq "$host_user" "$TMP_DIR/stdout" &&
    grep -Fxq "$host_uid" "$TMP_DIR/stdout"; then
-    printf 'PASS: TC-10 (identity matches host, REQ-12)\n'
+    printf 'PASS: TC-10 (identity matches host, REQ-SEC-1)\n'
     PASS_COUNT=$((PASS_COUNT + 1))
-    record_result "TC-10" "REQ-12" PASS
+    record_result "TC-10" "REQ-SEC-1" PASS
 else
-    printf 'FAIL: TC-10 (identity mismatch, REQ-12)\n'
+    printf 'FAIL: TC-10 (identity mismatch, REQ-SEC-1)\n'
     cat "$TMP_DIR/stdout" "$TMP_DIR/stderr" >&2
     FAIL_COUNT=$((FAIL_COUNT + 1))
-    record_result "TC-10" "REQ-12" FAIL
+    record_result "TC-10" "REQ-SEC-1" FAIL
 fi
 
 printf 'input\n' >"$TMP_DIR/input"
@@ -275,7 +278,7 @@ printf '\nRequirement coverage:\n'
 printf '%-12s %-20s %s\n' "REQ-ID" "TEST IDS" "PASS/FAIL"
 for requirement in REQ-1 REQ-2 REQ-3 REQ-4 REQ-5 REQ-6 REQ-7 REQ-8 \
     REQ-9 REQ-10 REQ-11 REQ-12 REQ-13 REQ-14 REQ-15 REQ-16 REQ-17 \
-    REQ-18 REQ-19 REQ-20 REQ-SEC-2 REQ-SEC-3 REQ-SEC-4; do
+    REQ-18 REQ-19 REQ-20 REQ-SEC-1 REQ-SEC-2 REQ-SEC-3 REQ-SEC-4; do
     test_ids=""
     result=PASS
     for index in "${!REQUIREMENTS[@]}"; do
