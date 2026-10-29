@@ -183,21 +183,60 @@ run_case "TC-20" "REQ-16" "empty side of pipe" \
     'echo hi |
 exit
 ' 0 "pipe requires commands"
-run_case "TC-21" "REQ-18" "background returns prompt immediately" \
-    'sleep 1 &
-echo prompt
-exit
-' 0 "prompt"
+# Measure whether a background command lets the shell continue within 100 ms.
+printf 'sleep 2 &\necho prompt\nexit\n' >"$TMP_DIR/background-input"
+
+/usr/bin/time -p "$SHELL_BIN" \
+    <"$TMP_DIR/background-input" \
+    >"$TMP_DIR/stdout" 2>"$TMP_DIR/timing"
+background_status=$?
+background_elapsed=$(awk '$1 == "real" { print $2 }' "$TMP_DIR/timing")
+
+if [ "$background_status" -eq 0 ] &&
+   grep -Fq "prompt" "$TMP_DIR/stdout" &&
+   [ -n "$background_elapsed" ] &&
+   awk -v elapsed="$background_elapsed" \
+       'BEGIN { exit !(elapsed < 0.100) }'; then
+    printf 'PASS: TC-21 (background command returns within 100 ms, REQ-18; %ss)\n' \
+        "$background_elapsed"
+    PASS_COUNT=$((PASS_COUNT + 1))
+    record_result "TC-21" "REQ-18" PASS
+else
+    printf 'FAIL: TC-21 (background command did not return within 100 ms, REQ-18)\n'
+    cat "$TMP_DIR/stdout" "$TMP_DIR/timing" >&2
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    record_result "TC-21" "REQ-18" FAIL
+fi
 run_case "TC-22" "REQ-18" "background lifecycle" \
     'sleep 0.1 &
 sleep 1
 exit
 ' 0 "Done sleep 0.1"
-run_case "TC-23" "REQ-18" "background pipeline is one job" \
-    'printf "x\n" | cat &
-sleep 1
-exit
-' 0 "Done printf x | cat"
+# Verify a background pipeline is one job with both PIDs and a status.
+printf 'sleep 0.3 | cat &\njobs\nsleep 1\nexit\n' |
+    "$SHELL_BIN" >"$TMP_DIR/stdout" 2>"$TMP_DIR/stderr"
+pipeline_status=$?
+
+pipeline_job_count=$(grep -Ec \
+    '^\[[0-9]+\] Running sleep 0\.3 \| cat \(PIDs: [0-9]+, [0-9]+\)$' \
+    "$TMP_DIR/stdout" || true)
+
+running_job_count=$(grep -Ec \
+    '^\[[0-9]+\] Running ' "$TMP_DIR/stdout" || true)
+
+if [ "$pipeline_status" -eq 0 ] &&
+   [ "$pipeline_job_count" -eq 1 ] &&
+   [ "$running_job_count" -eq 1 ] &&
+   grep -Fq 'Done sleep 0.3 | cat' "$TMP_DIR/stdout"; then
+    printf 'PASS: TC-23 (one background pipeline job with both PIDs and completion, REQ-18,REQ-19)\n'
+    PASS_COUNT=$((PASS_COUNT + 1))
+    record_result "TC-23" "REQ-18,REQ-19" PASS
+else
+    printf 'FAIL: TC-23 (background pipeline job tracking, REQ-18,REQ-19)\n'
+    cat "$TMP_DIR/stdout" "$TMP_DIR/stderr" >&2
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    record_result "TC-23" "REQ-18,REQ-19" FAIL
+fi
 run_case "TC-24" "REQ-19" "jobs lists background job" \
     'sleep 1 &
 jobs
