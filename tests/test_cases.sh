@@ -270,10 +270,38 @@ run_case "TC-32" "REQ-10" "maximum supported line" \
     "echo $LONG_ARGUMENT
 exit
 " 0 "$LONG_ARGUMENT"
-run_case "TC-34" "REQ-6" "quoted argument with spaces" \
+run_case "TC-35" "REQ-6" "quoted argument with spaces" \
     'printf "<%s>" "quoted argument with spaces"
 exit
 ' 0 "<quoted argument with spaces>"
+run_case "TC-36" "REQ-SEC-2" "missing input file reports error" \
+    "cat < $TMP_DIR/missing-input
+exit
+" 0 "missing-input"
+
+run_case "TC-37" "REQ-SEC-2" "missing output directory reports error" \
+    "echo x > $TMP_DIR/missing-dir/output
+exit
+" 0 "missing-dir/output"
+
+run_case "TC-38" "REQ-SEC-2" "reject nested parent traversal path" \
+    "cat < $TMP_DIR/../missing-traversal-input
+exit
+" 0 "'..' paths are not allowed"
+
+run_case "TC-39" "REQ-9" "malformed variable expansion recovers" \
+    'echo ${BROKEN
+echo recovered
+exit
+' 0 "recovered"
+printf 'original\n' >"$TMP_DIR/symlink-target"
+ln -s "$TMP_DIR/symlink-target" "$TMP_DIR/symlink-link"
+
+run_case "TC-40" "REQ-SEC-2" "reject symbolic-link output redirection" \
+    "echo modified > $TMP_DIR/symlink-link
+cat $TMP_DIR/symlink-target
+exit
+" 0 "original"
 printf '\nRequirement coverage:\n'
 printf '%-12s %-20s %s\n' "REQ-ID" "TEST IDS" "PASS/FAIL"
 for requirement in REQ-1 REQ-2 REQ-3 REQ-4 REQ-5 REQ-6 REQ-7 REQ-8 \
