@@ -1,3 +1,7 @@
+#if defined(__APPLE__) && !defined(_DARWIN_C_SOURCE)
+#define _DARWIN_C_SOURCE
+#endif
+
 #define _XOPEN_SOURCE 700
 
 #include "redirection.h"
@@ -131,7 +135,7 @@ int apply_redirection(Command *cmd)
         canonical_path = canonical_redirection_output(cmd->output_file);
         if (canonical_path == NULL)
             return -1;
-        fd = open(canonical_path, flags, 0644);
+        fd = open(canonical_path, flags | O_NOFOLLOW, 0644);
         free(canonical_path);
         if (fd < 0) {
             perror(cmd->output_file);

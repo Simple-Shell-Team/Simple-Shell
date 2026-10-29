@@ -1,3 +1,9 @@
 /myshell
 *.o
 *.d
+.DS_Store
+/tests/test_parser
+/tests/test_executor
+.env
+.env.*
+!.env.example
