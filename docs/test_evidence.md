@@ -5,30 +5,50 @@ implementation. Run the commands from the repository root on a POSIX system.
 
 ## Automated test output
 
-Run:
+Run the following commands from the repository root on a POSIX system:
 
 ```text
 make clean
 make test
 ```
 
-The expected successful run includes:
+The current successful local run includes:
 
 ```text
 Parser unit tests: 12 passed, 0 failed
-Executor unit tests: 7 passed, 0 failed
-34 tests passed
+Executor unit tests: 9 passed, 0 failed
+40 tests passed
 ```
 
 The regression suite prints a requirement-coverage table. In particular:
 
-- REQ-6 is covered by TC-29 and TC-34.
-- REQ-14 is covered by TC-12 and TC-19.
-- REQ-19 is covered by TC-24 and TC-33.
+- REQ-6 is covered by TC-29 and TC-35 for quoted operators and arguments with spaces.
+- REQ-14 is covered by TC-12 and TC-19 for output redirection.
+- REQ-18 is covered by TC-21, TC-22, and TC-23 for background execution and lifecycle.
+- REQ-19 is covered by TC-23, TC-24, and TC-33 for job tracking and PID display.
+- REQ-SEC-2 is covered by TC-25, TC-26, TC-36, TC-37, TC-38, and TC-40 for redirection-path validation.
 
-GitHub Actions repeats `make clean && make test` for pushes to `main` and pull
-requests. A successful workflow run is the CI evidence for the submitted
-source tree.
+TC-21 measures background-command return time and checks the 100 ms target.
+TC-23 checks that a background pipeline is listed as one job with both PIDs,
+its command line, a running status, and a completion message.
+
+GitHub Actions is configured to run `make clean && make test` on Ubuntu Linux
+for pull requests targeting `main`. After these review changes are pushed,
+the successful workflow run for the new pull request should be used as Linux
+build and regression-test evidence.
+
+## Limitations and deviations
+
+- REQ-1 and REQ-2 do not currently have dedicated automated tests that fully
+  verify their requirements.
+- REQ-21 through REQ-23 remain unimplemented requirements.
+- `2>` and `&&` are unsupported.
+- `&` is supported only at the end of a command line.
+- The `fg` and `bg` job-control commands are not available.
+- Background timing and lifecycle tests depend on operating-system scheduling;
+  the local result should be supplemented by Linux CI validation.
+- A passing test demonstrates only the behavior asserted by that test; it does
+  not establish complete compliance with the full requirements specification.
 
 ## Manual screenshot checklist
 
