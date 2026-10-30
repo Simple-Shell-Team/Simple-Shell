@@ -50,6 +50,23 @@ build and regression-test evidence.
 - A passing test demonstrates only the behavior asserted by that test; it does
   not establish complete compliance with the full requirements specification.
 
+## SRS, SAD, and Test Plan deviations
+
+The following deviations and verification gaps were identified during the
+requirements traceability review.
+
+| Source document | Deviation or gap | Status |
+| --- | --- | --- |
+| SRS | REQ-21, REQ-22, and REQ-23 (command history and interactive signal handling) are not implemented. | Documented in the RTM |
+| SRS | `2>` and `&&` are unsupported; `&` is supported only at the end of a command line; `fg` and `bg` are unavailable. | Documented scope limitations |
+| Test Plan | REQ-1 and REQ-2 do not have dedicated automated tests that fully verify their requirements. | Coverage incomplete |
+| Test Plan | REQ-4, REQ-12, and REQ-SEC-4 have specific coverage gaps documented in the RTM. | Coverage incomplete |
+| SAD | Architecture-level conformance has not been independently re-audited; no deviation is asserted. | Verification pending |
+
+These entries distinguish implementation limitations from test coverage gaps.
+A requirement marked implemented does not imply that every aspect of it
+has been tested. See `rtm_code_references.md` for requirement-level details.
+
 ## Manual screenshot checklist
 
 Capture the following terminal states after running `./myshell` and attach the
