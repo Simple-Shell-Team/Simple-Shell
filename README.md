@@ -149,9 +149,9 @@ make test
 - `tests/test_parser.c`: 12 parser checks covering commands, quoting, pipelines,
   redirection, background markers, environment expansion, empty input, and
   syntax errors.
-- `tests/test_executor.c`: 7 executor checks covering exit statuses, missing
+- `tests/test_executor.c`: 9 executor checks covering exit statuses, missing
   commands, and pipeline status handling.
-- `tests/test_cases.sh`: 34 requirement-labelled integration checks covering
+- `tests/test_cases.sh`: 40 requirement-labelled integration checks covering
   PATH lookup, built-ins, redirection, pipelines, background jobs, parser
   errors, and malformed or unusually long input.
 
@@ -160,7 +160,7 @@ following issue-specific entries:
 
 | Requirement | Regression coverage |
 | --- | --- |
-| REQ-6: quoted text is one argument | TC-29 and TC-34 |
+| REQ-6: quoted text is one argument | TC-29 and TC-35 |
 | REQ-14: `>` truncates stdout | TC-12 and TC-19 |
 | REQ-19: background job listing | TC-24 and TC-33 |
 
