@@ -132,7 +132,7 @@ status.
 
 See [`docs/rtm_code_references.md`](docs/rtm_code_references.md).
 
-Run the regression suite with `make clean && make test`. A passing test
+Run the complete suite with `make clean && make test`. A passing test
 confirms only the behavior asserted by that test; see the matrix for known
 coverage gaps and unimplemented requirements.
 
@@ -141,19 +141,20 @@ coverage gaps and unimplemented requirements.
 Build and run the regression suite with:
 
 ```bash
-make test
+make clean && make test
 ```
 
-`make test` runs both the focused C unit tests and the shell regression suite:
+`make clean && make test` runs both the focused C unit tests and the shell
+regression suite:
 
 - `tests/test_parser.c`: 12 parser checks covering commands, quoting, pipelines,
   redirection, background markers, environment expansion, empty input, and
   syntax errors.
 - `tests/test_executor.c`: 9 executor checks covering exit statuses, missing
-  commands, and pipeline status handling.
+  commands, pipeline status handling, and file-descriptor cleanup.
 - `tests/test_cases.sh`: 40 requirement-labelled integration checks covering
   PATH lookup, built-ins, redirection, pipelines, background jobs, parser
-  errors, and malformed or unusually long input.
+  errors, security validation, and malformed or unusually long input.
 
 The requirement coverage printed by `tests/test_cases.sh` includes the
 following issue-specific entries:
@@ -162,7 +163,9 @@ following issue-specific entries:
 | --- | --- |
 | REQ-6: quoted text is one argument | TC-29 and TC-35 |
 | REQ-14: `>` truncates stdout | TC-12 and TC-19 |
-| REQ-19: background job listing | TC-24 and TC-33 |
+| REQ-18: background execution | TC-21, TC-22, and TC-23 |
+| REQ-19: background job listing | TC-23, TC-24, and TC-33 |
+| REQ-SEC-2: redirection path validation | TC-25, TC-26, TC-36, TC-37, TC-38, and TC-40 |
 
 The complete source/function mapping is maintained in
 [`docs/rtm_code_references.md`](docs/rtm_code_references.md). The submitted
