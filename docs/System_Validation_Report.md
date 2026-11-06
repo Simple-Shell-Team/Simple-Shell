@@ -68,7 +68,8 @@ The missing-command diagnostic during executor testing was expected and formed p
 | Integration/regression tests | tests/test_cases.sh |
 | Test execution record | docs/Simple-Shell_Test_Plan.docx |
 | Unit test results | docs/Unit_Test_Report.md |
-| Line and branch coverage | docs/Branch_Coverage_Report.md |
+| Line coverage | docs/Code_Coverage_Report.md |
+| Branch coverage | docs/Branch_Coverage_Report.md |
 | Requirements traceability | docs/rtm_code_references.md |
 | Manual test evidence checklist | docs/test_evidence.md |
 
